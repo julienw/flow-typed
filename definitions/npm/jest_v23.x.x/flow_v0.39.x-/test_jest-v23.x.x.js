@@ -55,12 +55,18 @@ foo.doAsyncStuff = jest.fn().mockResolvedValue(10);
 // $ExpectError Mock function expected to return Promise<number>, not Promise<string>
 foo.doAsyncStuff = jest.fn().mockResolvedValue("10");
 
-foo.doAsyncStuff = jest.fn().mockResolvedValueOnce(10);
+foo.doAsyncStuff = jest
+  .fn()
+  .mockResolvedValueOnce(10)
+  .mockResolvedValueOnce(42);
+foo.doAsyncStuff.mockResolvedValue(51);
 // $ExpectError Mock function expected to return Promise<number>, not Promise<string>
 foo.doAsyncStuff = jest.fn().mockResolvedValueOnce("10");
 
 foo.doAsyncStuff = jest.fn().mockRejectedValue(10);
 foo.doAsyncStuff = jest.fn().mockRejectedValueOnce(10);
+foo.doAsyncStuff = jest.fn().mockRejectedValueOnce(new Error("hello world"));
+foo.doAsyncStuff.mockRejectedValueOnce(new Error("hello world"));
 
 foo.doStuff = jest.fn().mockName("10");
 // $ExpectError mockName expects a string, not a number
