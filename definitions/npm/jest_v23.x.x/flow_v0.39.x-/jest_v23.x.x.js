@@ -1,3 +1,9 @@
+type $ExtractPromiseValueFunc = <Value>(Promise<Value>) => Value;
+type $ExtractPromiseValue<PromiseValue> = $Call<
+  $ExtractPromiseValueFunc,
+  PromiseValue
+>;
+
 type JestMockFn<TArguments: $ReadOnlyArray<*>, TReturn> = {
   (...args: TArguments): TReturn,
   /**
@@ -77,19 +83,23 @@ type JestMockFn<TArguments: $ReadOnlyArray<*>, TReturn> = {
   /**
    * Sugar for jest.fn().mockImplementation(() => Promise.resolve(value))
    */
-  mockResolvedValue(value: TReturn): JestMockFn<TArguments, Promise<TReturn>>,
+  mockResolvedValue(
+    value: $ExtractPromiseValue<TReturn>
+  ): JestMockFn<TArguments, TReturn>,
   /**
    * Sugar for jest.fn().mockImplementationOnce(() => Promise.resolve(value))
    */
-  mockResolvedValueOnce(value: TReturn): JestMockFn<TArguments, Promise<TReturn>>,
+  mockResolvedValueOnce(
+    value: $ExtractPromiseValue<TReturn>
+  ): JestMockFn<TArguments, TReturn>,
   /**
    * Sugar for jest.fn().mockImplementation(() => Promise.reject(value))
    */
-  mockRejectedValue(value: TReturn): JestMockFn<TArguments, Promise<any>>,
+  mockRejectedValue(value: any): JestMockFn<TArguments, TReturn>,
   /**
    * Sugar for jest.fn().mockImplementationOnce(() => Promise.reject(value))
    */
-  mockRejectedValueOnce(value: TReturn): JestMockFn<TArguments, Promise<any>>
+  mockRejectedValueOnce(value: any): JestMockFn<TArguments, TReturn>
 };
 
 type JestAsymmetricEqualityType = {
